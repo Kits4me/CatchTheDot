@@ -15,6 +15,9 @@ Adafruit_NeoPixel strip = Adafruit_NeoPixel(MATRIX_TOTAL, PIN, NEO_GRB + NEO_KHZ
 
 #define ROBIN_LEN 12
 int Robin[ROBIN_LEN] = { 21,20,19,18,26,34,42,43,44,45,37,29 };
+#define Ring2_Len 20
+int Robin2[Ring2_Len] = { 14,13,12,11,10,9,17,25,33,41,49,50,51,52,53,54,46,38,30,22 };
+
 int currentPos = 0;
 int currColorIndex = 0;
 
@@ -37,12 +40,18 @@ void slowOffAll() {
     delay(200);
 }
 void lightRobinPixel( uint32_t clr) {
-    int pixelNum = Robin[currentPos];
+    //int pixelNum = Robin[currentPos];
+    int pixelNum = Robin2[currentPos];
     strip.setPixelColor(pixelNum, clr);
     strip.show();
 }
 void NextRobin() {
     lightRobinPixel(strip.Color(0, 0, 0));
     currentPos++;
+    //currentPos %= ROBIN_LEN;
+    currentPos %= Ring2_Len;
     lightRobinPixel(dotColors[currColorIndex]);
+}
+void neoSetup() {
+    strip.begin();
 }
