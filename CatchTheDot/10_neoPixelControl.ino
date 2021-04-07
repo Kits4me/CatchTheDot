@@ -24,6 +24,9 @@ int currColorIndex = 0;
 uint32_t dotColors[3] = {   strip.Color(30, 30, 30),
                             strip.Color(30, 0 ,0),
                             strip.Color(0, 30, 0) };
+void neoSetup() {
+    strip.begin();
+}
 void slowLightAll(uint32_t clr) {
     for (int pixelNum = 0; pixelNum < MATRIX_TOTAL; pixelNum++) {
         strip.setPixelColor(pixelNum, clr);
@@ -52,6 +55,36 @@ void NextRobin() {
     currentPos %= Ring2_Len;
     lightRobinPixel(dotColors[currColorIndex]);
 }
-void neoSetup() {
-    strip.begin();
+void newRound() {
+    colorsEnabled = false;
+    currentPos = 0;
+    currColorIndex = 0;
+    lastLightStartedMs = millis();
 }
+void chooseColor() {
+    if (colorsEnabled) {
+        if (colorIsOn) {
+            if (millis() - lastColoredStartTimeMs >= colorONtimeMs) {
+                currColorIndex = 0;
+                colorIsOn = false;
+                lastOffStartTimeMs = millis();
+                colorsEnabled = false;
+            }
+        }
+        else {
+            if (random(10) >= 7) {
+                colorIsOn = true;
+                lastColoredStartTimeMs = millis();
+                currColorIndex = random(1, 3);
+            }
+        }
+    }
+    else {
+        currColorIndex = 0;
+        colorIsOn = false;
+        if (millis() - lastOffStartTimeMs >= colorOFFtimeMs) {
+            colorsEnabled = true;
+        }
+    }
+}
+

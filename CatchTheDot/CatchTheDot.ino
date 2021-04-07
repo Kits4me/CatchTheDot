@@ -5,13 +5,29 @@
  Using:     Kits4.me Games kit
 */
 
-// the setup function runs once when you press reset or power the board
-void setup() {
-	neoSetup();
-}
+#define pinRedBtn 2
+#define pinGreenBtn 3
+
+
 int spd = 100;
-// the loop function runs over and over again until power down or reset
+int colorONtimeMs = 500;
+int colorOFFtimeMs = 800;
+long lastLightStartedMs;
+long lastColoredStartTimeMs;
+long lastOffStartTimeMs;
+bool colorsEnabled = false;
+bool colorIsOn = false;
+
+void setup() {
+	pinMode(pinRedBtn, INPUT);
+	pinMode(pinGreenBtn, INPUT);
+	neoSetup();
+	newRound();
+}
 void loop() {
-	NextRobin();
-	delay(spd);
+	if (millis() - lastLightStartedMs >= spd) {
+		chooseColor();
+		NextRobin();
+		lastLightStartedMs = millis();
+	}
 }
