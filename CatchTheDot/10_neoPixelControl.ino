@@ -12,11 +12,15 @@
 // NEO_GRB Pixels are wired for GRB bitstream (most NeoPixel products)
 // NEO_RGB Pixels are wired for RGB bitstream (v1 FLORA pixels, not v2)
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(MATRIX_TOTAL, PIN, NEO_GRB + NEO_KHZ800);
-#define BOARD_PIX_IN_ROW 7
-#define BOARD_PIX_IN_COL 6
-byte board[BOARD_PIX_IN_COL][BOARD_PIX_IN_ROW];
-int dropOnMsec = 250;
-uint32_t clrPlayer[3] = { 0,strip.Color(0, 30, 30),strip.Color(30, 0, 30) };
+
+#define ROBIN_LEN 12
+int Robin[ROBIN_LEN] = { 21,20,19,18,26,34,42,43,44,45,37,29 };
+int currentPos = 0;
+int currColorIndex = 0;
+
+uint32_t dotColors[3] = {   strip.Color(30, 30, 30),
+                            strip.Color(30, 0 ,0),
+                            strip.Color(0, 30, 0) };
 void slowLightAll(uint32_t clr) {
     for (int pixelNum = 0; pixelNum < MATRIX_TOTAL; pixelNum++) {
         strip.setPixelColor(pixelNum, clr);
@@ -32,8 +36,13 @@ void slowOffAll() {
     }
     delay(200);
 }
-void lightPixel(int row, int col, uint32_t clr) {
-    int pixelNum = row * MATRIX_COLS + col;
+void lightRobinPixel( uint32_t clr) {
+    int pixelNum = Robin[currentPos];
     strip.setPixelColor(pixelNum, clr);
     strip.show();
+}
+void NextRobin() {
+    lightRobinPixel(strip.Color(0, 0, 0));
+    currentPos++;
+    lightRobinPixel(dotColors[currColorIndex]);
 }
