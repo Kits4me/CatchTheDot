@@ -42,6 +42,12 @@ void slowOffAll() {
     }
     delay(200);
 }
+void MatOffAll() {
+    for (int pixelNum = 0; pixelNum < MATRIX_TOTAL; pixelNum++) {
+        strip.setPixelColor(pixelNum, strip.Color(0, 0, 0));
+    }
+    strip.show();
+}
 void lightRobinPixel( uint32_t clr) {
     //int pixelNum = Robin[currentPos];
     int pixelNum = Robin2[currentPos];
@@ -60,6 +66,7 @@ void newRound() {
     currentPos = 0;
     currColorIndex = 0;
     lastLightStartedMs = millis();
+    lastOffStartTimeMs = millis();
 }
 void chooseColor() {
     if (colorsEnabled) {

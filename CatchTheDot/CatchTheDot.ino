@@ -9,9 +9,13 @@
 #define pinGreenBtn 3
 
 
+int GameLongMs = 20000;
+bool GameEnabled;
+long GameStartTime;
+
 int spd = 200;
 int colorONtimeMs = 800;
-int colorOFFtimeMs = 1400;
+int colorOFFtimeMs = 1000;
 long lastLightStartedMs;
 long lastColoredStartTimeMs;
 long lastOffStartTimeMs;
@@ -19,35 +23,51 @@ bool colorsEnabled = false;
 bool colorIsOn = false;
 
 int score;
+void NewGame() {
+	score = 0;
+	GameEnabled = true;
+	GameStartTime = millis();
+	newRound();
+}
 void setup() {
 	pinMode(pinRedBtn, INPUT_PULLUP);
 	pinMode(pinGreenBtn, INPUT_PULLUP);
 	neoSetup();
 	setup_7seg();
-	score = 0;
-	newRound();
+	NewGame();
 }
 void loop() {
-	if (digitalRead(pinRedBtn) == LOW) {
-		if (isRed()) {
-			GoodAns();
-		}
-		else {
-			BadAns();
-		}
-	}
-	if (digitalRead(pinGreenBtn) == LOW) {
-		if (isGreen()) {
-			GoodAns();
-		}
-		else {
-			BadAns();
+	if (millis() - GameStartTime >= GameLongMs) {
+		GameEnabled = false;
+		MatOffAll();
+		if ((digitalRead(pinGreenBtn) == LOW) && (digitalRead(pinRedBtn) == LOW)) {
+			while (digitalRead(pinGreenBtn) == LOW) { delay(50); }
+			while (digitalRead(pinRedBtn) == LOW) { delay(50); }
+			NewGame();
 		}
 	}
-	if (millis() - lastLightStartedMs >= spd) {
-		chooseColor();
-		NextRobin();
-		lastLightStartedMs = millis();
+	else {
+		if (digitalRead(pinRedBtn) == LOW) {
+			if (isRed()) {
+				GoodAns();
+			}
+			else {
+				BadAns();
+			}
+		}
+		if (digitalRead(pinGreenBtn) == LOW) {
+			if (isGreen()) {
+				GoodAns();
+			}
+			else {
+				BadAns();
+			}
+		}
+		if (millis() - lastLightStartedMs >= spd) {
+			chooseColor();
+			NextRobin();
+			lastLightStartedMs = millis();
+		}
 	}
 	showNum(score, spd);
 }
