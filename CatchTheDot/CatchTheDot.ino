@@ -23,6 +23,7 @@ void setup() {
 	pinMode(pinRedBtn, INPUT_PULLUP);
 	pinMode(pinGreenBtn, INPUT_PULLUP);
 	neoSetup();
+	setup_7seg();
 	score = 0;
 	newRound();
 }
@@ -48,6 +49,7 @@ void loop() {
 		NextRobin();
 		lastLightStartedMs = millis();
 	}
+	showNum(score, spd);
 }
 void GoodAns() {
 	score++;

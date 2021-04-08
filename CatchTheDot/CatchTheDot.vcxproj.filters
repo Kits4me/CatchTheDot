@@ -20,6 +20,7 @@
       <Filter>Misc Files</Filter>
     </None>
     <None Include="10_neoPixelControl.ino" />
+    <None Include="k_20_disp595.ino" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="__vm\.CatchTheDot.vsarduino.h">

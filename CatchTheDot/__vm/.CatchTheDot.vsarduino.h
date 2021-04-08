@@ -91,5 +91,6 @@ typedef void *__builtin_va_list;
 
 #include "CatchTheDot.ino"
 #include "10_neoPixelControl.ino"
+#include "k_20_disp595.ino"
 #endif
 #endif
