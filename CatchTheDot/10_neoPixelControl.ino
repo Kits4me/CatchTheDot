@@ -17,7 +17,7 @@ Adafruit_NeoPixel strip = Adafruit_NeoPixel(MATRIX_TOTAL, PIN, NEO_GRB + NEO_KHZ
 int Robin[ROBIN_LEN] = { 21,20,19,18,26,34,42,43,44,45,37,29 };
 #define Ring2_Len 20
 int Robin2[Ring2_Len] = { 14,13,12,11,10,9,17,25,33,41,49,50,51,52,53,54,46,38,30,22 };
-
+int middleRect[4] = { 27,28,35,36 };
 int currentPos = 0;
 int currColorIndex = 0;
 
@@ -87,4 +87,45 @@ void chooseColor() {
         }
     }
 }
+bool isRed() {
+    return (colorIsOn && currColorIndex == 1);
+}
+bool isGreen() {
+    return (colorIsOn && currColorIndex == 2);
+}
+void LightUpperLineInGreen() {
+    for (int pixelNum = 56; pixelNum < 64; pixelNum++) {
+        strip.setPixelColor(pixelNum, strip.Color(0, 30, 0));
+    }
+    for (int k = 0; k < 4; k++) {
+        strip.setPixelColor(middleRect[k], strip.Color(0, 30, 0));
+    }
+    strip.show();
+    delay(500);
+    for (int pixelNum = 56; pixelNum < 64; pixelNum++) {
+        strip.setPixelColor(pixelNum, strip.Color(0, 0, 0));
+    }
+    for (int k = 0; k < 4; k++) {
+        strip.setPixelColor(middleRect[k], strip.Color(0, 0, 0));
+    }
+    strip.show();
 
+}
+void LightLowerLineInRed() {
+    for (int pixelNum = 0; pixelNum < 8; pixelNum++) {
+        strip.setPixelColor(pixelNum, strip.Color(30, 0, 0));
+    }
+    for (int k = 0; k < 4; k++) {
+        strip.setPixelColor(middleRect[k], strip.Color(30, 0, 0));
+    }
+    strip.show();
+    delay(500);
+    for (int pixelNum = 0; pixelNum < 8; pixelNum++) {
+        strip.setPixelColor(pixelNum, strip.Color(0, 0, 0));
+    }
+    for (int k = 0; k < 4; k++) {
+        strip.setPixelColor(middleRect[k], strip.Color(0, 0, 0));
+    }
+    strip.show();
+
+}
